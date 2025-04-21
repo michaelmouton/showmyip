@@ -8,8 +8,8 @@ RUN install -m 0755 -d /usr/local/apache2/curl
 
 COPY ./conf/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY ./htdocs/* /usr/local/apache2/htdocs/
-COPY ./cgi-bin/index.html /usr/local/apache2/html/index.html
-COPY ./cgi-bin/curl.html /usr/local/apache2/curl/index.html
+COPY ./include/index.html /usr/local/apache2/html/index.html
+COPY ./include/curl.html /usr/local/apache2/curl/index.html
 
 RUN chmod 644 /usr/local/apache2/conf/httpd.conf
 RUN chmod 644 /usr/local/apache2/htdocs/*
