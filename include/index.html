@@ -10,24 +10,7 @@
   <div class="container">
     <h1 id="output">0.0.0.0</h1>
   </div>
-  <script>
-    const output = document.getElementById('output');
-    const interval = setInterval(() => {
-      fetch('/curl/index.html')
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.text();
-        })
-        .then(text => {
-          if (text.trim() !== "") {
-            output.innerText = text;
-            clearInterval(interval);
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching content:', error);
-        });
-    }, 250);
-  </script>
+  <script src="/htdocs/main.js"></script>
+  <script src="/htdocs/display.js"></script>
 </body>
 </html>
