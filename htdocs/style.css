@@ -28,9 +28,6 @@ body {
 }
 
 @media (min-width: 768px) {
-  body {
-    height: 100vh;
-  }
   .container h1 {
     font-size: 3rem;
   }
