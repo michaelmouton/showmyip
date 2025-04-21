@@ -13,7 +13,7 @@
   <script>
     const output = document.getElementById('output');
     const interval = setInterval(() => {
-      fetch('/curl/index.sh')
+      fetch('/curl/index.html')
         .then(response => {
           if (!response.ok) throw new Error('Network response was not ok');
           return response.text();
