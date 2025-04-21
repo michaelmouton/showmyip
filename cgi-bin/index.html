@@ -1,19 +1,33 @@
-#!/bin/bash
-
-echo -e 'Content-type: text/html\n'
-echo '<!DOCTYPE html>'
-echo '<html lang="en">'
-echo '<head>'
-echo '  <meta charset="UTF-8">'
-echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">'
-echo '  <title>Hello, World!</title>'
-echo '  <link rel="stylesheet" href="/htdocs/style.css">'
-echo '</head>'
-echo '<body>'
-echo '  <div class="container">'
-echo -n '    <h1>'
-echo -n "$REMOTE_ADDR"
-echo '</h1>'
-echo '  </div>'
-echo '</body>'
-echo '</html>'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello, World!</title>
+  <link rel="stylesheet" href="/htdocs/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 id="output">0.0.0.0/0</h1>
+  </div>
+  <script>
+    const output = document.getElementById('output');
+    const interval = setInterval(() => {
+      fetch('/curl/index.sh')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.text();
+        })
+        .then(text => {
+          if (text.trim() !== "") {
+            output.innerText = text;
+            clearInterval(interval);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching content:', error);
+        });
+    }, 250);
+  </script>
+</body>
+</html>
