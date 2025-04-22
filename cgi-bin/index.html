@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo -e 'Content-type: text/plain; charset=utf-8\n'
+echo -e 'Content-type: text/plain; charset=utf-8\nX-Content-Type-Options: nosniff\n'
 echo "$REMOTE_ADDR"
