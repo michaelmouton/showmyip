@@ -1,36 +1,57 @@
 (() => {
   let isTouching = false;
-  let resumeTimeout;
+  let currentVh = window.innerHeight * 0.01;
 
-  function setRealVh() {
-    if (isTouching) return;
-    const vh = window.innerHeight * 0.01;
+  function setVh(vh) {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
-  // Set initial value
-  setRealVh();
+  function animateVh(from, to, duration = 1000) {
+    const startTime = performance.now();
 
-  // Update on resize (but only when not touching)
-  const onResize = () => {
-    setRealVh();
-  };
+    function step(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
 
-  window.addEventListener('resize', onResize, { passive: true });
+      // Exponential easing (easeOutExpo)
+      const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 
-  // Pause updates on touch
+      const newVh = from + (to - from) * eased;
+      setVh(newVh);
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        currentVh = to;
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  function updateVh() {
+    if (isTouching) return;
+    const newVh = window.innerHeight * 0.01;
+
+    if (Math.abs(newVh - currentVh) > 0.1) {
+      animateVh(currentVh, newVh);
+    }
+  }
+
+  // Initial set
+  setVh(currentVh);
+
+  // Resize listener
+  window.addEventListener('resize', updateVh, { passive: true });
+
+  // Pause on touch
   window.addEventListener('touchstart', () => {
     isTouching = true;
-    if (resumeTimeout) {
-      clearTimeout(resumeTimeout);
-    }
   }, { passive: true });
 
-  // Resume updates 500ms after touch ends
+  // Resume and refresh after touch ends
   window.addEventListener('touchend', () => {
-    resumeTimeout = setTimeout(() => {
-      isTouching = false;
-      setRealVh(); // Refresh vh after delay
-    }, 500);
+    isTouching = false;
+    updateVh(); // Ensure immediate refresh after touch ends
   }, { passive: true });
 })();
